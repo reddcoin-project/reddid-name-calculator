@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>The Name calculator</title>
+  <meta name="description" content="The Name calculator">
+  <meta name="author" content="Gnasher">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <!--[if lt IE 9]>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+
+</head>
+
+<body>
+	<h1>Redd-ID name calculator</h1>
+	<p>Calculate the value of a name.</p>
+	<p>You can adjust to values of the fields to alter the calculation results.</p>
+	<div id="calc">
+		<input type="text" id="name">
+			<div class="tooltip"> Name
+				<span class="tooltiptext">Enter a name</span>
+			</div>
+		<br>
+		  <button type="button" onclick="exports.price.nameprice()">Enter</button>
+		<br><p id="result"></p>
+		<br>
+		<div id = "params">
+			<input type="text" id="base">
+				<div class="tooltip"> Base
+					<span class="tooltiptext">Base price of a name (RDD)</span>
+				</div>
+			<br>
+			<input type="text" id="coeff">
+				<div class="tooltip"> Coeff
+					<span class="tooltiptext">Price multiplier</span>
+				</div>
+			<br>
+			<br>
+			<input type="text" id="no_vowel">
+				<div class="tooltip"> Non vowel discount
+					<span class="tooltiptext">Discount to apply if no vowels present</span>
+				</div>
+			<br>
+			<input type="text" id="no_alpha">
+				<div class="tooltip"> Non alpha discount
+					<span class="tooltiptext">Discount to apply if no non-alpha present</span>
+				</div>
+			<br>
+			<br>
+			<input type="text" id="b0"> <div class="tooltip"> Word length multipler (1 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b1"> <div class="tooltip"> Word length multipler (2 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b2">	<div class="tooltip"> Word length multipler (3 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b3">	<div class="tooltip"> Word length multipler (4 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b4">	<div class="tooltip"> Word length multipler (5 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b5">	<div class="tooltip"> Word length multipler (6 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b6">	<div class="tooltip"> Word length multipler (7 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b7">	<div class="tooltip"> Word length multipler (8 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b8">	<div class="tooltip"> Word length multipler (9 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b9">	<div class="tooltip"> Word length multipler (10 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b10"> <div class="tooltip"> Word length multipler (11 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b11"> <div class="tooltip"> Word length multipler (12 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b12"> <div class="tooltip"> Word length multipler (13 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b13"> <div class="tooltip"> Word length multipler (14 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b14"> <div class="tooltip"> Word length multipler (15 char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<input type="text" id="b15"> <div class="tooltip"> Word length multipler (16+ char)
+					<span class="tooltiptext">Value to apply to a word of this length</span>
+				</div>
+			<br>
+			<br>
+			<input type="text" id="satoshi">
+				<div class="tooltip"> Price in satoshi
+					<span class="tooltiptext">Current price in satoshi</span>
+				</div>
+			<br>
+			<input type="text" id="btc_usd">
+				<div class="tooltip"> Current bitcoin price $$
+					<span class="tooltiptext">Current fiat price of bitcoin</span>
+				</div>
+			<br>
+		</div>
+		<div id="table_sched1">
+			<table id="nametable1">
+			</table>
+		</div>
+		<div id="table_sched2">
+			<table id="nametable2">
+			</table>
+		</div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="./js/cost.js"></script>
+</body>
+</html>
