@@ -1,3 +1,20 @@
+body {
+    font-family: "Lato", sans-serif;
+    font-size: 14px;
+    color: #333333;
+    background-color: #FAFAFA;
+    line-height: 1.55;
+}
+h1 {
+    color: #ed1c24;
+}
+button {
+    border-radius: 3px;
+    height: 30px;
+    width: 300px;
+    background-color: #151f3a;
+    color: #FAFAFA;
+}
 /* Tooltip container */
 .tooltip {
     position: relative;
@@ -25,6 +42,8 @@
     /* Fade in tooltip */
     opacity: 0;
     transition: opacity 1s;
+
+    font-size: 13px;
 }
 
 /* Tooltip arrow */
@@ -34,9 +53,8 @@
     top: 100%;
     left: 50%;
     margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
+    border: 5px solid transparent;
+    border-top-color: #555;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
@@ -46,24 +64,25 @@
 }
 
 #params {
-    width: 400px;
+    width: 430px;
     position: absolute;
 
 }
 #table_sched1 {
     width: 350px;
     position: absolute;
-    left: 450px;
+    left: 480px;
 }
 #table_sched2 {
     width: 350px;
     position: absolute;
-    left: 820px;
+    left: 900px;
+    margin-bottom: 50px;
 }
 td, th {
-    border: 1px solid #dddddd;
+    border: 1px solid #151f3a;
     text-align: right;
-    padding: 4px;
+    padding: 2px;
 }
 th {
     text-align: center;
