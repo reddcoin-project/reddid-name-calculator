@@ -4,21 +4,25 @@ costing = exports;
 COIN = 0.00000001;
 
 (function (exports) {
-	var private = {
+	var priv = {
 		nameCostUnit : 100000000, // 100000000 satoshis (1 RDD)
 		vowels : ["a","e","i","o","u"],
 		non_alpha : ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", "_"],
 		vowel_names : ["a","ab","abb","abbb","abbbb","abbbbb","abbbbbb","abbbbbbb","abbbbbbbb","abbbbbbbbb","abbbbbbbbbb","abbbbbbbbbbb","abbbbbbbbbbbb","abbbbbbbbbbbbb","abbbbbbbbbbbbbb","abbbbbbbbbbbbbbb"],
 		non_vowel_names : ["b","bb","bbb","bbbb","bbbbb","bbbbbb","bbbbbbb","bbbbbbbb","bbbbbbbbb","bbbbbbbbbb","bbbbbbbbbbb","bbbbbbbbbbbb","bbbbbbbbbbbbb","bbbbbbbbbbbbbb","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbbb"],
-		namespace : {"base":4,"coeff":250,"no_vowel_discount":10,"no_alpha_discount":10,"bucket":[8,7,6,5,4,3,2,2,2,2,2,2,2,2,2,1]},
+		namespace_name: "default",
+		namespace : {
+			default: {"base":4,"coeff":250,"no_vowel_discount":10,"no_alpha_discount":10,"bucket":[8,7,6,5,4,3,2,2,2,2,2,2,2,2,2,1]},
+			reddid: {"base":2,"coeff":2,"no_vowel_discount":2,"no_alpha_discount":2,"bucket":[15, 14, 13, 12, 11, 10, 10, 9, 9, 9, 8, 8, 8, 8, 8, 7]}
+		},
 		price : {"satoshi": 0.00000085, "fiat": 8500.00}
 
 	},
-	public = {};
+	pub = {};
 
 	//private
-	private.sum = function (name, array) {
-		sum = 0;
+	priv.sum = function (name, array) {
+		let sum = 0;
 		name = name.toLowerCase();
 		for (v in array) {
 			if (name.indexOf(array[v]) >= 0 ) {
@@ -27,140 +31,176 @@ COIN = 0.00000001;
 			//console.log("Sum Vowels: " + sum)
 		}
 		return sum;
-	}
+	};
 
-	private.calc_name = function (name, namespace) {
+	priv.calc_name = function (name, namespace_name) {
 
-		bucket_exponent = 0;
-		discount = 1.0;
-		result = {};
+		let bucket_exponent = 0;
+		let discount = 1.0;
+		let result = {};
+		let namespace = priv.namespace[namespace_name];
 
 		if (name.length <= namespace.bucket.length) {
-			bucket_exponent = namespace.bucket[name.length -1]
-			result.length = "Using length modifier " + bucket_exponent + ", ";
+			bucket_exponent = namespace.bucket[name.length -1];
+			result.length = "Using length multiplier " + bucket_exponent + ", ";
 		} else {
-			bucket_exponent = 0
-			result.length = "No length modifier used. ";
+			bucket_exponent = 0;
+			result.length = "No length multiplier used. ";
 		}
 
-		if (private.sum(name, private.vowels) == 0 ) {
+		if (priv.sum(name, priv.vowels) === 0 ) {
 			discount = Math.max (discount, namespace.no_vowel_discount );
 			result.no_vowel = "No vowels used, discount applied. ";
 		} else {
 			result.no_vowel = "Vowels are used, so no discount applied. ";
 		}
 
-		if (private.sum(name, private.non_alpha) > 0 ) {
-			discount = Math.max (discount, namespace.no_alpha_discount )
+		if (priv.sum(name, priv.non_alpha) > 0 ) {
+			discount = Math.max (discount, namespace.no_alpha_discount );
 			result.non_alpha = "Non alpha chars used, discount applied. ";
 		} else {
 			result.non_alpha = "Alpha chars only used, so no discount applied. ";
 		}
 
-		price = (namespace.coeff * (namespace.base ** bucket_exponent)) / discount * private.nameCostUnit
-		if (price < private.nameCostUnit) {
-			price = private.nameCostUnit
+		let price = (namespace.coeff * (namespace.base ** bucket_exponent)) / discount * priv.nameCostUnit;
+		if (price < priv.nameCostUnit) {
+			price = priv.nameCostUnit
 		}
 
 		result.price = price;
 
 		return result;
-	}
-	private.calc_fiat = function(price) {
-		var fiat = private.price.fiat;
-		var sat = private.price.satoshi;
-		var base = fiat * sat;
-		var cost = base * price;
+	};
+	priv.calc_fiat = function(price) {
+		let fiat = priv.price.fiat;
+		let sat = priv.price.satoshi;
+		let base = fiat * sat;
+		let cost = base * price;
 
 		return cost.toFixed(2)
 
 
-	}
-	private.calcTable = function() {
-		var table_head = '<tr><th colspan="3">Names with Vowels</th></tr> <tr><th>Name</th><th>RDD Value</th><th>$$$</th></tr>'
-		var table_body = ''
-		for (name in private.vowel_names) {
-			var result = private.calc_name(private.vowel_names[name], private.namespace)
-			var price = private.calc_fiat(private.formatPrice(result.price))
-			table_body += '<tr><td class="name">' + private.vowel_names[name] + '</td><td>' + private.formatPrice(result.price) + '</td><td>' + price + '</td></tr>'
+	};
+	priv.calcTable = function() {
+		let table_head = '<tr><th colspan="3">Names with Vowels</th></tr> <tr><th>Name</th><th>RDD Value</th><th>$$$</th></tr>';
+		let table_body = '';
+		for (name in priv.vowel_names) {
+			let result = priv.calc_name(priv.vowel_names[name], priv.namespace_name);
+			let price = priv.calc_fiat(priv.formatPrice(result.price));
+			table_body += '<tr><td class="name">' + priv.vowel_names[name] + '</td><td>' + priv.formatPrice(result.price) + '</td><td>' + price + '</td></tr>'
 		}
 		document.getElementById("nametable1").innerHTML = table_head + table_body;
 
-		table_head = '<tr><th colspan="3">Names without Vowels</th></tr><tr><th>Name</th><th>RDD Value</th><th>$$$</th></tr>'
-		table_body = ''
-		for (name in private.non_vowel_names) {
-			var result = private.calc_name(private.non_vowel_names[name], private.namespace)
-			var price = private.calc_fiat(private.formatPrice(result.price))
-			table_body += '<tr><td class="name">' + private.non_vowel_names[name] + '</td><td>' + private.formatPrice(result.price) + '</td><td>' + price + '</td></tr>'
+		table_head = '<tr><th colspan="3">Names without Vowels</th></tr><tr><th>Name</th><th>RDD Value</th><th>$$$</th></tr>';
+		table_body = '';
+		for (name in priv.non_vowel_names) {
+			let result = priv.calc_name(priv.non_vowel_names[name], priv.namespace_name);
+			let price = priv.calc_fiat(priv.formatPrice(result.price));
+			table_body += '<tr><td class="name">' + priv.non_vowel_names[name] + '</td><td>' + priv.formatPrice(result.price) + '</td><td>' + price + '</td></tr>'
 		}
 		document.getElementById("nametable2").innerHTML = table_head + table_body;
-	}
+	};
 
-	private.getNamespace = function() {
-		namespace = {};
-		price = {};
+	priv.getNamespace = function() {
+		let namespace = {};
+		let price = {};
 		namespace.base = document.getElementById("base").value;
 		namespace.coeff = document.getElementById("coeff").value;
 		namespace.no_vowel_discount = document.getElementById("no_vowel").value;
 		namespace.no_alpha_discount = document.getElementById("no_alpha").value;
 		namespace.bucket = [];
 
-		for (i = 0; i < 16; i++){
+		for (let i = 0; i < 16; i++){
 			namespace.bucket[i] = document.getElementById("b" + i).value;
 		}
 
 		price.satoshi = document.getElementById("satoshi").value;
 		price.fiat = document.getElementById("btc_usd").value;
-		private.price = price;
+		priv.price = price;
 
-		console.log ("Namespace " + JSON.stringify(namespace))
-		private.namespace = namespace;
-	}
-	private.formatPrice = function(satoshis) {
-		cost = satoshis * COIN
+		console.log ("Namespace " + JSON.stringify(namespace));
+	};
+
+	priv.setNamespace = function() {
+		let namespace = {};
+		let price = {};
+		namespace.base = document.getElementById("base").value;
+		namespace.coeff = document.getElementById("coeff").value;
+		namespace.no_vowel_discount = document.getElementById("no_vowel").value;
+		namespace.no_alpha_discount = document.getElementById("no_alpha").value;
+		namespace.bucket = [];
+
+		for (let i = 0; i < 16; i++){
+			namespace.bucket[i] = document.getElementById("b" + i).value;
+		}
+
+		price.satoshi = document.getElementById("satoshi").value;
+		price.fiat = document.getElementById("btc_usd").value;
+		priv.price = price;
+
+		console.log ("Namespace " + JSON.stringify(namespace));
+		priv.namespace["scratch"] = namespace;
+		priv.namespace_name = "scratch";
+	};
+
+	priv.formatPrice = function(satoshis) {
+		let cost = satoshis * COIN;
 		cost = cost.toFixed(8);
 		return cost
-	}
-
-	public.initListeners = function(){
-		document.getElementById("calc").onkeyup = function(e) {
-			var name = e.target.id;
-			console.log ("value changes: " + name )
-			private.getNamespace();
-			private.calcTable();
-			public.nameprice();
-		}
-	}
+	};
 
 	//public
+	
+	pub.initListeners = function(){
+		document.getElementById("calc").onkeyup = function(e) {
+			let name = e.target.id;
+			console.log ("value changes: " + name );
+			priv.getNamespace();
+			priv.calcTable(priv.namespace_name);
+			pub.nameprice();
+		};
 
-	public.nameprice = function () {
-		name = document.getElementById("name").value;
-		result = private.calc_name(name, private.namespace)
-		cost = private.formatPrice(result.price);
-		fiat = private.calc_fiat(private.formatPrice(result.price))
-		document.getElementById("result").innerHTML = "Price of " + name + " is " + cost + " RDD or $" + fiat + ".<br>" + name + " is " + name.length + " chars.<br>" + result.length + result.no_vowel + result.non_alpha;
-	}
+		document.getElementById("params").onkeyup = function(v) {
+			console.log (`Value for ${v.target.id} modified`);
+			priv.setNamespace();
+			priv.calcTable(priv.namespace_name);
+			pub.nameprice();
+		}
+	};
 
-	public.load = function () {
-		document.getElementById("base").value = private.namespace.base;
-		document.getElementById("coeff").value = private.namespace.coeff;
-		document.getElementById("no_vowel").value = private.namespace.no_vowel_discount;
-		document.getElementById("no_alpha").value = private.namespace.no_alpha_discount;
+	pub.nameprice = function () {
+		let name = document.getElementById("name").value;
+		let namespace = priv.namespace_name;
+		let result = priv.calc_name(name, namespace);
+		let cost = priv.formatPrice(result.price);
+		let fiat = priv.calc_fiat(priv.formatPrice(result.price));
+		document.getElementById("result").innerHTML = `Using the ${priv.namespace_name} namespace calculations.<br>${name} is ${name.length} characters long.<br>${result.length}<br>${result.no_vowel}<br>${result.non_alpha} `;
+		document.getElementById("result_cost").innerHTML = `<br>The price of ${name} is ${cost} RDD or approx ${fiat} USD.`
+	};
+
+	pub.load = function (namespace_name) {
+
+		let namespace = priv.namespace[namespace_name];
+
+		document.getElementById("base").value = namespace.base;
+		document.getElementById("coeff").value = namespace.coeff;
+		document.getElementById("no_vowel").value = namespace.no_vowel_discount;
+		document.getElementById("no_alpha").value = namespace.no_alpha_discount;
 		
-		for (i = 0; i < 16; i++){
-			document.getElementById("b" + i).value = private.namespace.bucket[i];
+		for (let i = 0; i < 16; i++){
+			document.getElementById("b" + i).value = namespace.bucket[i];
 		}
 
-		document.getElementById("satoshi").value = private.price.satoshi.toFixed(8);
-		document.getElementById("btc_usd").value = private.price.fiat;
+		document.getElementById("satoshi").value = priv.price.satoshi.toFixed(8);
+		document.getElementById("btc_usd").value = priv.price.fiat;
 		//private.getNamespace();
-		private.calcTable();
-	}
-	public.load();
-	public.initListeners();
+		priv.calcTable(namespace_name);
+	};
+
+	pub.load(priv.namespace_name);
+	pub.initListeners();
 
 	// Publish module
-	exports.price = public;
+	exports.price = pub;
 })(exports);
 
