@@ -10,10 +10,11 @@ COIN = 0.00000001;
 		non_alpha : ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", "_"],
 		vowel_names : ["a","ab","abb","abbb","abbbb","abbbbb","abbbbbb","abbbbbbb","abbbbbbbb","abbbbbbbbb","abbbbbbbbbb","abbbbbbbbbbb","abbbbbbbbbbbb","abbbbbbbbbbbbb","abbbbbbbbbbbbbb","abbbbbbbbbbbbbbb"],
 		non_vowel_names : ["b","bb","bbb","bbbb","bbbbb","bbbbbb","bbbbbbb","bbbbbbbb","bbbbbbbbb","bbbbbbbbbb","bbbbbbbbbbb","bbbbbbbbbbbb","bbbbbbbbbbbbb","bbbbbbbbbbbbbb","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbbb"],
-		namespace_name: "default",
+		namespace_name: "reddid",
 		namespace : {
 			default: {"base":4,"coeff":250,"no_vowel_discount":10,"no_alpha_discount":10,"bucket":[8,7,6,5,4,3,2,2,2,2,2,2,2,2,2,1]},
-			reddid: {"base":2,"coeff":2,"no_vowel_discount":2,"no_alpha_discount":2,"bucket":[15, 14, 13, 12, 11, 10, 10, 9, 9, 9, 8, 8, 8, 8, 8, 7]}
+			reddid: {"base":2,"coeff":2,"no_vowel_discount":2,"no_alpha_discount":2,"bucket":[15, 14, 13, 12, 11, 10, 10, 9, 9, 9, 8, 8, 8, 8, 8, 7]},
+			tester: {"base":2,"coeff":2,"no_vowel_discount":2,"no_alpha_discount":2,"bucket":[12, 11, 11, 10, 10, 10, 9, 9, 9, 9, 8, 8, 8, 8, 8, 7]}
 		},
 		price : {"satoshi": 0.00000085, "fiat": 8500.00}
 
