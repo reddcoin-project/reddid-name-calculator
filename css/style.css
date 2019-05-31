@@ -102,7 +102,9 @@ button {
 #params {
     padding: 20px
 }
-
+#params_container {
+    display: none
+}
 #table_sched1 {
     padding: 20px
 }
