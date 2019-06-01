@@ -198,8 +198,44 @@ COIN = 0.00000001;
 		priv.calcTable(namespace_name);
 	};
 
+	pub.getPrices = function() {
+		function updatePrices() {
+			let Url = 'price/rdd';
+			$.ajax({
+				url: Url,
+				dataType: 'json',
+				type: "GET",
+				success: function(result) {
+					document.getElementById("satoshi").value = result.result.Last.toFixed(8)
+
+				},
+				error: function (error) {
+					console.log (`Error ${error}`)
+				}
+			});
+
+			Url = 'price/btc';
+			$.ajax({
+				url: Url,
+				dataType: 'json',
+				type: "GET",
+				success: function(result) {
+					document.getElementById("btc_usd").value = result.result.Last.toFixed(2)
+
+				},
+				error: function (error) {
+					console.log (`Error ${error}`)
+				}
+			});
+		}
+
+		updatePrices()
+
+	};
+
 	pub.load(priv.namespace_name);
 	pub.initListeners();
+	pub.getPrices()
 
 	// Publish module
 	exports.price = pub;
