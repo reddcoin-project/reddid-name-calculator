@@ -1,0 +1,10 @@
+{
+  // forever config file for server.js
+  "uid": "reddid-name-calculator",
+  "append": true,
+  "watch": true,
+  "script" : "server.js",
+  "logFile": "./name-calculator.server.log",
+  "outFile": "./name-calculator.out.log",
+  "errFile": "./name-calculator.err.log"
+}
