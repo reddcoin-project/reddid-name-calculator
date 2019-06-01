@@ -229,7 +229,8 @@ COIN = 0.00000001;
 			});
 		}
 
-		updatePrices()
+		updatePrices();
+		setInterval(function(){ pub.getPrices(); }, 30000);
 
 	};
 
