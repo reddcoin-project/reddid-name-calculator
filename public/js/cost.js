@@ -230,7 +230,7 @@ COIN = 0.00000001;
 		}
 
 		updatePrices();
-		setInterval(function(){ pub.getPrices(); }, 30000);
+		setInterval(function(){ updatePrices(); }, 30000);
 
 	};
 
